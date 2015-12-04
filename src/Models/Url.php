@@ -1,0 +1,58 @@
+<?php
+
+namespace Luminark\Url\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Exception;
+
+class Url extends Model
+{
+    public $timestamps = false;
+
+    public $incrementing = false;
+
+    protected $fillable = ['uri', 'redirects_to'];
+
+    protected $primaryKey = 'uri';
+
+    protected $with = ['resource', 'redirectsTo'];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function (Url $url) {
+            $url->created_at = Carbon::now();
+        });
+    }
+
+    public function resource()
+    {
+        return $this->morphTo();
+    }
+
+    public function redirectsTo()
+    {
+        return $this->belongsTo(static::class, 'redirects_to', 'uri');
+    }
+
+    public function redirectedToBy()
+    {
+        return $this->hasMany(static::class, 'redirects_to_url', 'uri');
+    }
+    
+    public function setUriAttribute($uri)
+    {
+        if ($this->exists) {
+            throw new Exception(
+                "An existing Url object's uri parameter cannot be updated, update the resource's uri attribute instead."
+            );
+        }
+        
+        $this->setAttribute('uri', $uri);
+    }
+
+    public function __toString()
+    {
+        return $this->uri;
+    }
+}
