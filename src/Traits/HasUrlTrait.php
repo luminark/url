@@ -10,17 +10,17 @@ trait HasUrlTrait
     
     public function url()
     {
-        return $this->morphOne($this->getUrlClass());
+        return $this->morphOne($this->getUrlClass(), 'resource');
     }
     
     public function getUriAttribute()
     {
-        return $this->_uri ?: $this->url ? $this->url->uri : null;
+        return $this->_uri ?: ($this->url ? $this->url->uri : null);
     }
     
     public function setUriAttribute($uri)
     {
-        $this->setAttribute('uri', $uri);
+        //$this->attributes['uri'] = $uri;
         $this->_uri = $uri;
     }
     
@@ -37,16 +37,24 @@ trait HasUrlTrait
         // Check if this resource object is already associated with a Url object
         if ( ! $originalUrl && ! is_null($uri)) {
             // Associate a new Url object with current resource object
-            $this->url()->associate($urlClass::create(['uri' => $uri]));
+            $url = $urlClass::create(['uri' => $uri]);
+            $url->resource()->associate($this);
+            $url->save();
         // Dissociate content from URL if uri set to null
         } elseif (is_null($uri)) {
-            $this->url()->dissociate();
+            $originalUrl->resource()->dissociate();
+            $originalUrl->save();
         // Redirect old Url object to new Url object
         } elseif ($originalUrl && $originalUrl->uri !== $uri) {
+            $originalUrl->resource()->dissociate();
+            $originalUrl->save();
             $newUrl = $urlClass::firstOrCreate(['uri' => $uri]);
             $this->redirectUrl($originalUrl, $newUrl);
-            $this->url()->associate($newUrl);
+            $newUrl->resource()->associate($this);
+            $newUrl->save();
         }
+        
+        $this->load('url');
         
         return $this;
     }

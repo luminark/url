@@ -3,6 +3,7 @@
 namespace Luminark\Url\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Exception;
 
 class Url extends Model
@@ -48,11 +49,16 @@ class Url extends Model
             );
         }
         
-        $this->setAttribute('uri', $uri);
+        $this->attributes['uri'] = $uri;
+    }
+    
+    public function getUrlAttribute()
+    {
+        return '/' . $this->uri;
     }
 
     public function __toString()
     {
-        return $this->uri;
+        return $this->url;
     }
 }

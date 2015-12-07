@@ -14,10 +14,12 @@ class UrlServiceProvider extends ServiceProvider
     
     public function register()
     {
-        $this->app['events']->listen('eloquent.saving*', function ($model) {
+        $this->app['events']->listen('eloquent.saved*', function ($model) {
             if ($model instanceof HasUrlInterface) {
-                $model->updateContentUri();
+                $model->updateUri();
             }
         });
+        
+        //TODO Handle deleting
     }
 }
