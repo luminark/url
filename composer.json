@@ -1,11 +1,11 @@
 {
     "name": "luminark/url",
     "description": "Luminark URL package.",
-    "version": "0.0.3",
     "require": {
         "illuminate/database": "^5.1",
         "illuminate/support": "^5.1",
-        "nesbot/carbon": "^1.21"
+        "nesbot/carbon": "^1.21",
+        "symfony/http-kernel": "^3.0"
     },
     "license": "MIT",
     "authors": [

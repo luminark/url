@@ -6,25 +6,50 @@ use Luminark\Url\Models\Url;
 
 trait HasUrlTrait
 {
+    /**
+     * Temporary internal variable for updated URI.
+     * 
+     * @var string
+     */
     protected $_uri;
     
+    /**
+     * Url object representing the URL which points to this resource.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\MorphOne
+     */
     public function url()
     {
         return $this->morphOne($this->getUrlClass(), 'resource');
     }
     
+    /**
+     * Overrides Eloquent Model's default attribute getting and gets
+     * the currently set URI.
+     * 
+     * @return string|null URI
+     */
     public function getUriAttribute()
     {
         return $this->_uri ?: ($this->url ? $this->url->uri : null);
     }
     
+    /**
+     * Overrides Eloquent Model's default attribute setting to store the URI
+     * without touching the database. Override this method if you need to have 
+     * the URI stored as model attribute in the database.
+     */
     public function setUriAttribute($uri)
     {
-        //$this->attributes['uri'] = $uri;
         $this->_uri = $uri;
     }
     
-    public function updateUri($uri = null)
+    /**
+     * Saves the URI and related URL object for the model.
+     * 
+     * @return Luminark\Url\Interfaces\HasUrlInterface URL resource object
+     */
+    public function saveUri($uri = null)
     {
         $urlClass = $this->getUrlClass();
         $originalUrl = $this->url;
@@ -54,16 +79,29 @@ trait HasUrlTrait
             $newUrl->save();
         }
         
+        // Refresh the model with updated URL object
         $this->load('url');
         
         return $this;
     }
     
+    /**
+     * Gets the class for URL object needed to define Eloquent relationship
+     * between resource and URL models. Override this method if Url class
+     * is being extended.
+     * 
+     * @return string Url class
+     */
     protected function getUrlClass()
     {
         return Url::class;
     }
 
+    /**
+     * Transforms URI value as required before storing it.
+     * 
+     * @return string Transformed URI value
+     */
     protected function prepareUri($uri)
     {
         // Remove starting and trailing slash from URI
@@ -75,8 +113,10 @@ trait HasUrlTrait
     }
 
     /**
-     * @param Content $content
-     * @param $uri
+     * Validates the URL value and makes sure it is unique. Override this 
+     * method if custom validation is needed.
+     * 
+     * @return boolean URI validity status
      */
     protected function validateUri($uri)
     {
@@ -87,8 +127,10 @@ trait HasUrlTrait
     }
 
     /**
-     * @param $originalUrl
-     * @param $newUrl
+     * Modifies the $originalUrl to redirect to $newUrl.
+     * 
+     * @param Url $originalUrl The URL that will be redirecting
+     * @param Url $newUrl The URL that will be redirected to
      */
     protected function redirectUrl(Url $originalUrl, Url $newUrl)
     {

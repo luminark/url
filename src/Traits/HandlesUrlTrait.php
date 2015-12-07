@@ -3,6 +3,7 @@
 namespace Luminark\Url\Traits;
 
 use Luminark\Url\Models\Url;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait HandlesUrlTrait 
 {
@@ -17,7 +18,7 @@ trait HandlesUrlTrait
             return redirect($url->url);
         }
 
-        return $this->getResourceResponse($url);
+        return $this->getUrlResourceResponse($url);
     }
     
     protected function findUrlByUri($uri)
@@ -25,15 +26,15 @@ trait HandlesUrlTrait
         try {
             $url = Url::findOrFail($uri);
         } catch (ModelNotFoundException $e) {
-            abort(404);
+            throw new NotFoundHttpException(null, $e);
         }
         
         return $url;
     }
 
-    protected function getResourceResponse(Url $url)
+    protected function getUrlResourceResponse(Url $url)
     {
-        return view('resource')->with('resource', $url->resource);
+        // Handle URL here
     }
     
 }

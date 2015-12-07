@@ -9,7 +9,9 @@ class UrlServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        // Handle config here
+        $this->publishes([
+            __DIR__ . '/../database/migrations/' => database_path('migrations')
+        ], 'migrations');
     }
     
     public function register()
