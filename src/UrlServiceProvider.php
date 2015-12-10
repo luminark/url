@@ -24,7 +24,6 @@ class UrlServiceProvider extends ServiceProvider
         
         $this->app['events']->listen('eloquent.deleted*', function ($model) {
             if ($model instanceof HasUrlInterface && $model->url) {
-                // TODO Handle soft deleting via config
                 $model->url->delete();
             }
         });
