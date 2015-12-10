@@ -15,7 +15,7 @@ class CreateUrlsTable extends Migration
         Schema::create('urls', function (Blueprint $table) {
             $table->string('uri')->primary();
             $table->string('redirects_to')->nullable()->index();
-            //$table->morphs('urlable');
+            // Nullable morphs_to resource
             $table->integer('resource_id')->unsigned()->nullable();
             $table->string('resource_type')->nullable();
             $table->timestamp('created_at');
