@@ -19,6 +19,10 @@ class CreateUrlsTable extends Migration
             $table->integer('resource_id')->unsigned()->nullable();
             $table->string('resource_type')->nullable();
             $table->timestamp('created_at');
+            
+            $table->foreign('redirects_to')
+                ->references('uri')->on('urls')
+                ->onDelete('cascade');
         });
     }
 

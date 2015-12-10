@@ -9,4 +9,6 @@ interface HasUrlInterface
     public function getUriAttribute();
     
     public function setUriAttribute($uri);
+    
+    public function saveUri($uri = null);
 }

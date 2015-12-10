@@ -24,6 +24,13 @@ class Url extends Model
         static::creating(function (Url $url) {
             $url->created_at = Carbon::now();
         });
+        static::deleting(function (Url $url) {
+            if ($url->redirectedToBy) {
+                $url->redirectedToBy->each(function (Url $url) {
+                    $url->delete();
+                });
+            }
+        });
     }
 
     public function resource()
@@ -38,7 +45,7 @@ class Url extends Model
 
     public function redirectedToBy()
     {
-        return $this->hasMany(static::class, 'redirects_to_url', 'uri');
+        return $this->hasMany(static::class, 'redirects_to', 'uri');
     }
     
     public function setUriAttribute($uri)

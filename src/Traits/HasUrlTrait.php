@@ -36,7 +36,7 @@ trait HasUrlTrait
     
     /**
      * Overrides Eloquent Model's default attribute setting to store the URI
-     * without touching the database. Override this method if you need to have 
+     * in memory only. Override this method if you need to have 
      * the URI stored as model attribute in the database.
      */
     public function setUriAttribute($uri)

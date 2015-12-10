@@ -77,6 +77,29 @@ class UrlTest extends TestCase
         $this->assertEquals($resource->url->id, $oldUrl->redirectsTo->id, 'Url does not redirect properly.');
     }
     
+    public function testResourceUrlDelete()
+    {
+        $resource = Resource::create([
+            'title' => 'Test Deleting',
+            'uri' => 'test/deleting-1'
+        ]);
+        
+        $resource->uri = 'test/deleting-2';
+        $resource->save();
+        
+        $resource->uri = 'test/deleting-3';
+        $resource->save();
+        
+        $resource->delete();
+        
+        $url3 = Url::find('test/deleting-3');
+        $this->assertNull($url3, 'Url has not been properly deleted.');
+        $url2 = Url::find('test/deleting-2');
+        $this->assertNull($url2, 'Old Url has not been properly deleted.');
+        $url1 = Url::find('test/deleting-1');
+        $this->assertNull($url1, 'Old Url has not been properly deleted.');
+    }
+    
     public function testUrlVisit()
     {
         $uri = 'foo/bar/url-testing';
