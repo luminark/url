@@ -1,5 +1,7 @@
 #Luminark URL Package
 
+[![Build Status](https://travis-ci.org/luminark/url.svg)](https://travis-ci.org/luminark/url)
+
 ##Installation
 
 ```php
