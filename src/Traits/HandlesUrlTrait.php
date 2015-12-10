@@ -3,6 +3,7 @@
 namespace Luminark\Url\Traits;
 
 use Luminark\Url\Models\Url;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait HandlesUrlTrait 
