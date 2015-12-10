@@ -1,6 +1,7 @@
 #Luminark URL Package
 
-[![Build Status](https://travis-ci.org/luminark/url.svg)](https://travis-ci.org/luminark/url)
+[![Build Status](https://img.shields.io/travis/luminark/url.svg?style=flat-square)](https://travis-ci.org/luminark/url)
+[![Code Coverage](https://img.shields.io/codecov/c/github/luminark/url.svg?style=flat-square)](https://codecov.io/github/luminark/url)
 
 ##Installation
 
