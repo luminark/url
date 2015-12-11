@@ -75,6 +75,24 @@ class UrlTest extends TestCase
         $this->assertNotNull($resource->url, 'New Url is not properly set.');
         $this->assertNotNull($oldUrl->redirectsTo, 'Old Url does not redirect properly.');
         $this->assertEquals($resource->url->id, $oldUrl->redirectsTo->id, 'Url does not redirect properly.');
+        
+        $resource->uri = null;
+        $resource->save();
+        
+        $this->assertNull($resource->url, 'Url not properly dissociated from resource.');
+        
+        $this->setExpectedException('Exception');
+        $oldUrl->uri = 'new-url';
+    }
+    
+    public function testToString()
+    {
+        $resource = Resource::create([
+            'title' => 'URL testing',
+            'uri' => 'url-testing'
+        ]);
+        
+        $this->assertEquals('/url-testing', (string) $resource->url, 'Url not properly converted to string');
     }
     
     public function testResourceUrlDelete()
@@ -119,5 +137,8 @@ class UrlTest extends TestCase
         
         $response = $this->call('GET', '/' . $uri);
         $this->assertRedirectedTo('/' . $newUri);
+        
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+        $response = $this->call('GET', '/foo/bar');
     }
 }

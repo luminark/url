@@ -11,7 +11,7 @@ trait HasUrlTrait
      * 
      * @var string
      */
-    protected $_uri;
+    protected $_uri = false;
     
     /**
      * Url object representing the URL which points to this resource.
@@ -31,7 +31,9 @@ trait HasUrlTrait
      */
     public function getUriAttribute()
     {
-        return $this->_uri ?: ($this->url ? $this->url->uri : null);
+        return $this->_uri === false 
+            ? ($this->url ? $this->url->uri : null) 
+            : $this->_uri;
     }
     
     /**
@@ -68,7 +70,8 @@ trait HasUrlTrait
         // Dissociate content from URL if uri set to null
         } elseif (is_null($uri)) {
             $originalUrl->resource()->dissociate();
-            $originalUrl->save();
+            $originalUrl->delete();
+            $this->url = null;
         // Redirect old Url object to new Url object
         } elseif ($originalUrl && $originalUrl->uri !== $uri) {
             $originalUrl->resource()->dissociate();

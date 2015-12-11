@@ -36,6 +36,7 @@ trait HandlesUrlTrait
     protected function getUrlResourceResponse(Url $url)
     {
         // Handle URL here
+        return $url;
     }
     
 }
