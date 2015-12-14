@@ -68,7 +68,7 @@ class UrlTest extends TestCase
 
         $resource->uri = 'new-url-testing';
         $resource->save();
-        
+
         $oldUrl = Url::find('url-testing');
 
         $this->assertEquals('new-url-testing', $resource->uri, 'Url not properly updated.');

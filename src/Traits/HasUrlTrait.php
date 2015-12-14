@@ -43,7 +43,7 @@ trait HasUrlTrait
      */
     public function setUriAttribute($uri)
     {
-        $this->_uri = $uri;
+        $this->_uri = $uri === false ? null : $uri;
     }
     
     /**
