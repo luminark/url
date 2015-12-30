@@ -28,6 +28,13 @@ class UrlTest extends TestCase
         Url::boot();
     }
     
+    public function tearDown()
+    {
+        $this->artisan('migrate:rollback', [
+          '--database' => 'testbench'
+        ]);
+    }
+    
     /**
      * Define environment setup.
      *

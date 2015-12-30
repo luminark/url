@@ -33,10 +33,5 @@ trait HandlesUrlTrait
         return $url;
     }
 
-    protected function getUrlResourceResponse(Url $url)
-    {
-        // Handle URL here
-        return $url;
-    }
-    
+    abstract protected function getUrlResourceResponse(Url $url);
 }
